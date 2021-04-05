@@ -1,0 +1,5 @@
+etc/sql/*
+etc/conf/*-worker.conf
+!etc/conf/laravel-worker.conf
+!etc/sql/.gitkeep
+!etc/sql/01.sql

@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  # The web
+  web:
+    container_name: web
+    build:
+      context: "./etc"
+      dockerfile: web.dockerfile
+    working_dir: /var/www
+    volumes:
+      - ./etc/index.html:/var/www/html/index.html:cached
+      - ../projects/gossby:/var/www/gossby:delegated
+      - ../projects/teawork_server:/var/www/teawork:delegated
+    #   - ../projects/teawork/wordpress:/var/www/teawork/wordpress:delegated
+      # - ~/.composer/docker-cache/:/root/.composer:cached
+    ports:
+      - 80:80
+    restart: always
+    # networks:
+    #   docker_network:
+    #     ipv4_address: "10.3.0.16"
+  db:
+    image: mariadb:10.4
+    restart: always
+    environment:
+      MYSQL_USER: "dongtt"
+      MYSQL_PASSWORD: "dongtt"
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./etc/sql:/docker-entrypoint-initdb.d:cached
+      - docker_ubuntu_db:/var/lib/mysql
+    # networks:
+    #   docker_network:
+    #     ipv4_address: "10.3.0.14"
+# networks:
+#   docker_network:
+#     driver: "bridge"
+#     ipam:
+#       config:
+#         - subnet: 10.3.0.0/16
+volumes:
+  docker_ubuntu_db:
