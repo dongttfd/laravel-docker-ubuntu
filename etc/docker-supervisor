@@ -1,0 +1,10 @@
+FROM dongtt/laravel-ubuntu
+
+# supervisor install
+RUN apt-get update && apt-get install supervisor -y
+
+# supervisor for laravel config
+ADD /conf/supervisord.conf /etc/supervisor/supervisord.conf
+# ADD /conf/laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

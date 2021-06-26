@@ -1,6 +1,6 @@
 #!/bin/sh
 
-docker build . --rm -t ubuntu_docker
+docker build . --rm -t dongtt/laravel-ubuntu
 
 docker-compose down
 

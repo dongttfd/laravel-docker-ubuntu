@@ -6,27 +6,47 @@ services:
     container_name: web
     build:
       context: "./etc"
-      dockerfile: web.dockerfile
-    working_dir: /var/www
+      dockerfile: docker-web
+    working_dir: /var/www/<mouted-folder>
     volumes:
-      - ./etc/index.html:/var/www/html/index.html:cached
-      - ../projects/gossby:/var/www/gossby:delegated
-      - ../projects/teawork_server:/var/www/teawork:delegated
-    #   - ../projects/teawork/wordpress:/var/www/teawork/wordpress:delegated
-      # - ~/.composer/docker-cache/:/root/.composer:cached
+      - <source-code>:/var/www/<mouted-folder>:delegated
+      - ~/.composer/docker-cache/:/root/.composer:cached
     ports:
       - 80:80
     restart: always
     # networks:
     #   docker_network:
     #     ipv4_address: "10.3.0.16"
+
+  # The contab
+  crontab:
+    container_name: crontab
+    build:
+      context: "./etc"
+      dockerfile: docker-crontab
+    volumes:
+      - <source-code>:/var/www/<mouted-folder>:delegated
+    restart: always
+
+  # The supervisor
+  supervisor:
+    container_name: supervisor
+    build:
+      context: "./etc"
+      dockerfile: docker-supervisor
+    volumes:
+      - <source-code>:/var/www/<mouted-folder>:delegated
+      - ./etc/conf/supervisor.d:/etc/supervisor/conf.d:delegated
+    restart: always
+
   db:
+    container_name: mariadb
     image: mariadb:10.4
     restart: always
     environment:
-      MYSQL_USER: "dongtt"
-      MYSQL_PASSWORD: "dongtt"
-      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_USER: "<mysql-username>"
+      MYSQL_PASSWORD: "mysql-password"
+      MYSQL_ROOT_PASSWORD: "mysql-root-password"
     ports:
       - "3306:3306"
     volumes:

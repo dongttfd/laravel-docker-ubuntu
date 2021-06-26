@@ -1,0 +1,19 @@
+FROM dongtt/laravel-ubuntu
+
+COPY /index.html /var/www/index.html
+ADD /conf/php.ini /etc/php/7.4/fpm/php.ini
+ADD /conf/vhosts.conf /etc/apache2/sites-available/vhosts.conf
+RUN a2dissite 000-default && a2ensite vhosts
+
+# nodejs
+RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh \
+    && sh nodesource_setup.sh \
+    && apt install nodejs  \
+    && node -v \
+    && npm -v
+
+RUN chown -R www-data:www-data /var/www/
+
+EXPOSE 80
+
+CMD ["apachectl", "-D", "FOREGROUND"]

@@ -17,5 +17,5 @@ RUN apt-get install -y apache2 libapache2-mod-php7.4 \
     && a2enmod proxy_fcgi setenvif \
     && a2enconf php7.4-fpm \
     && a2enmod rewrite
-# RUN apt-get install -y libapache2-mod-php7.4
+
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
